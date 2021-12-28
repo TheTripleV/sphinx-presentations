@@ -27,6 +27,7 @@ function buildPresentation(presentation: Presentation, slidesElement: _H){
         )
     }
 }
+(window as any).buildPresentation = buildPresentation;
 
 
 function createSlides(elements: Element[]): Slide[] {
@@ -75,13 +76,18 @@ function createSlides(elements: Element[]): Slide[] {
     return slides;
 
 }
+(window as any).createSlides = createSlides;
 
 function getElements(): Element[] {
     let elements = [];
     let webSections = document.getElementsByClassName("section");
+    if (webSections.length == 0) {
+        let rstContent = document.getElementsByClassName("rst-content")[0];
+        webSections = rstContent.getElementsByTagName("section");
+    }
     for (const section of webSections) {
         for(const child of section.children) {
-            if (child.classList.contains("section")) {
+            if (child.classList.contains("section") || child.tagName.toLowerCase() == "section") {
                 break;
             }
             elements.push(child);
@@ -89,6 +95,8 @@ function getElements(): Element[] {
     }
     return elements;
 }
+(window as any).getElements = getElements;
+
 
 function present(): void {
     /* Start the presentation.
