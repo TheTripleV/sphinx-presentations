@@ -36,6 +36,14 @@ function createSlides(elements: Element[]): Slide[] {
     for (const element of elements) {
         if (["H1", "H2", "H3", "H4", "H5", "H6"].includes(element.tagName)) {
             // We have a title slide
+
+            for (const child of element.children) {
+                // Don't show the paragraph symbol that headerlinks use
+                if (child.classList.contains("headerlink")) {
+                    child.remove();
+                }
+            }
+            
             title = element.textContent;
             slides.push({ type: "title", title: title, items: [] });
             continue;
@@ -246,14 +254,23 @@ function initializePresentation(presentation: Presentation, reveal: Reveal) {
 }
 (window as any).initializePresentation = initializePresentation;
 
-
 window.addEventListener("DOMContentLoaded", () => {
-    /* Inject a "Present" button into the page so the user can launch the presentation. */
-    let fries = document.getElementsByClassName("wy-breadcrumbs-aside")[0];
-
-    let button = document.createElement("button");
-    button.textContent = "Present!";
-    button.onclick = present;
-
-    fries.appendChild(button);
+    const query = window.location.search;
+    const urlParams = new URLSearchParams(query);
+    const shouldPresent = urlParams.get("present") != null;
+    if (shouldPresent) {
+        present();
+    }
 });
+
+
+// window.addEventListener("DOMContentLoaded", () => {
+//     /* Inject a "Present" button into the page so the user can launch the presentation. */
+//     let fries = document.getElementsByClassName("wy-breadcrumbs-aside")[0];
+
+//     let button = document.createElement("button");
+//     button.textContent = "Present!";
+//     button.onclick = present;
+
+//     fries.appendChild(button);
+// });

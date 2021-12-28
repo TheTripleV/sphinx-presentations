@@ -24,8 +24,8 @@ setuptools.setup(
     url="https://github.com/TheTripleV/sphinx-presentations",
     packages=["sphinxext/presentations"],
     package_data={"sphinxext/presentations": [
-        "static/css/*.css",
-        "static/js/*.js",
+        "static/css/*",
+        "static/js/*",
     ]},
     include_package_data=True,
     install_requires=["sphinx>=2.0"],

@@ -2,7 +2,7 @@ export {splitParagraph, getToken};
 
 import {Token, Tokenizer, StringIterator, TokenIterable} from 'lexing';
 import { match, select } from 'ts-pattern';
-
+import * as cldrSegmentation from 'cldr-segmentation';
 
 const rules = [
     [/^$/, (m) => Token("EOF", null)],
@@ -45,7 +45,7 @@ function parse(output: TokenIterable<any>): string[] {
          .with({name: "Word", value: select()}, (v) => v)
          .run();
         if (token.name == 'Punctuation' || (token.name == 'EOF' && sent.length > 0)) {
-            sentences.push(sent);
+            sentences.push(sent.trim());
             sent = "";
         }
     } while (token.name !== 'EOF');
@@ -54,6 +54,25 @@ function parse(output: TokenIterable<any>): string[] {
 
 function splitParagraph(paragraph:string) {
     /* Split a paragraph into sentences. */
+
+    let sentences: string[] = [];
+
+    // ------------------------------------------------------------
+    // Custom Lexer
+
     const output = tokenizer.map(new StringIterator(paragraph));
-    return parse(output);
+    sentences = parse(output);
+
+    // ------------------------------------------------------------
+    // cldrSegmentation
+
+    // const suppressions = cldrSegmentation.suppressions.en;
+    // sentences = cldrSegmentation.sentenceSplit(paragraph, suppressions);
+
+    // sentences = sentences.map((sentence: string) => sentence.trim());
+
+    // ------------------------------------------------------------
+
+    return sentences;
+
 }
