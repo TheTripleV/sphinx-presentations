@@ -78,6 +78,8 @@ function buildItem(item:Item): _H {
         .with({type: "text", text: select()}, (t) => {
             let p = H("p");
             p.element.textContent = t;
+            p.element.style.fontSize = "0.7em";
+            p.element.style.lineHeight = "1.2";
             return p;
         })
         .with({items: __}, (s) => buildSlide(s))
@@ -115,6 +117,8 @@ function buildSlide(slide:Slide): _H {
             div.append(ul);
             for (const item of slide.items) {
                 let li = H("li");
+                li.element.style.fontSize = "2.5em";
+                li.element.style.lineHeight = "1.2";
                 li.append(buildItem(item));
                 li.element.style.marginBottom = "24px";
                 ul.append(li);
@@ -155,6 +159,8 @@ function buildSlide(slide:Slide): _H {
             col2.append(ul);
             for (const item of slide.items) {
                 let li = H("li");
+                li.element.style.fontSize = "2.5em";
+                li.element.style.lineHeight = "1.2";
                 li.append(buildItem(item));
                 li.element.style.marginBottom = "24px";
                 ul.append(li);

@@ -154,39 +154,61 @@ function present(): void {
 
     let elements = getElements();
     let slidesArray = createSlides(elements);
+
+    let spLink = H("a");
+    spLink.element.setAttribute("href", "https://github.com/TheTripleV/sphinxext-presentations");
+    spLink.element.textContent = "sphinxext-presentations";
+    spLink = H("p").append(spLink);
+
+    slidesArray.push(
+        {
+            type: "content",
+            title: "End of Presentation",
+            items: [
+                {type: "text", text: "This presentation was made possible by"},
+                {type: "html", h: spLink},
+                {type: "text", text: "and by contributions to documentation from viewers like you."},
+                {type: "text", text: "Thank You"},
+            ],
+        }
+    );
+
     console.log(slidesArray);
     let presentation = {slides: slidesArray};
 
     buildPresentation(presentation, slides);
 
     // Download the CSS for the presentation library
-    peabody.prepend(
-        htmlToElement(
-            `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.2/dist/reveal.css">`
-        )
-    );
-
-    peabody.append(
-        // Download the JS for the presentation library
-        createScriptSrcElement(
-            `https://cdn.jsdelivr.net/npm/headjs@1.0.3/dist/1.0.0/head.min.js`,
-            () => {
-                peabody.append(
-                    // Download the CSS for the presentation library
-                    createScriptSrcElement(
-                        `https://cdn.jsdelivr.net/npm/reveal.js@4.1.2/dist/reveal.min.js`,
-                        () => {
-                            initializePresentation(presentation, Reveal)
-                        }
-                    )
-                )
-            }
-        )
-    );
-
+    // peabody.prepend(
+    //     htmlToElement(
+    //         `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.2/dist/reveal.css">`
+    //     )
+    // );
+    
     // Inject the built presentation into the page
     let sherman = document.getElementsByTagName("body")[0];
     sherman.parentNode.replaceChild(peabody.element, sherman);
+    
+    initializePresentation(presentation, Reveal);
+
+    // peabody.append(
+    //     // Download the JS for the presentation library
+    //     createScriptSrcElement(
+    //         `https://cdn.jsdelivr.net/npm/headjs@1.0.3/dist/1.0.0/head.min.js`,
+    //         () => {
+    //             peabody.append(
+    //                 // Download the CSS for the presentation library
+    //                 createScriptSrcElement(
+    //                     `https://cdn.jsdelivr.net/npm/reveal.js@4.1.2/dist/reveal.min.js`,
+    //                     () => {
+    //                         initializePresentation(presentation, Reveal)
+    //                     }
+    //                 )
+    //             )
+    //         }
+    //     )
+    // );
+
 
 }
 (window as any).present = present;
@@ -197,7 +219,7 @@ function initializePresentation(presentation: Presentation, reveal: Reveal) {
     */
 
     // Initialize the presentation library
-    Reveal.initialize({
+    reveal.initialize({
         controls: true,
         width: '100%',
         height: '100%',
@@ -234,11 +256,13 @@ function initializePresentation(presentation: Presentation, reveal: Reveal) {
         display: 'block'
     });
 
-    Reveal.on( 'slidetransitionend', event => {
+    function onSlideTransitioned(event: any) {
         // This is called when the current slide changes.
         let slideIndex = event.indexh;
-        let slideHeight = event.currentSlide.getBoundingClientRect().height;
+        let slideHeight = reveal.getCurrentSlide().getBoundingClientRect().height;
         let windowHeight = window.innerHeight;
+
+        console.log(slideHeight, windowHeight);
 
         if (slideHeight > windowHeight) {
             // Split the current slide if it is too tall for the browser window
@@ -249,16 +273,19 @@ function initializePresentation(presentation: Presentation, reveal: Reveal) {
             }
             let [slide1, slide2] = newSlides;
             presentation.slides[slideIndex] = slide1;
-            presentation.slides.splice(slideIndex, 0, slide2);
+            presentation.slides.splice(slideIndex + 1, 0, slide2);
 
             // @ts-ignore
-            buildPresentation(window.slides);
+            buildPresentation(presentation, window.slides);
 
             // Force a refresh of the presentation
-            Reveal.slide( event.indexh, event.indexv, event.indexf );
+            // reveal.sync();
+            reveal.slide( event.indexh, event.indexv, event.indexf );
+            onSlideTransitioned(event);
         }
+    }
 
-    });
+    reveal.on( 'slidetransitionend', event => {onSlideTransitioned(event)} );
 }
 (window as any).initializePresentation = initializePresentation;
 
