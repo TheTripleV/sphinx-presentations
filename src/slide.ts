@@ -80,6 +80,7 @@ function buildItem(item:Item): _H {
             p.element.textContent = t;
             p.element.style.fontSize = "0.7em";
             p.element.style.lineHeight = "1.2";
+            p.element.style.textAlign = "left";
             return p;
         })
         .with({items: __}, (s) => buildSlide(s))
@@ -95,6 +96,7 @@ function buildSlide(slide:Slide): _H {
     return match(slide)
         .with({type: "title"}, (slide: Slide) => {
             let section = H("section");
+            section.element.style.textAlign = "left";
             let div = H("div");
             section.append(div);
             div.element.style.margin = "32px";
@@ -105,6 +107,7 @@ function buildSlide(slide:Slide): _H {
         })
         .with({type: "content"}, () => {
             let section = H("section");
+            section.element.style.textAlign = "left";
             let div = H("div");
             section.append(div);
             div.element.style.margin = "32px";
@@ -127,6 +130,7 @@ function buildSlide(slide:Slide): _H {
         })
         .with({type: "figure and content"}, (slide) => {
             let section = H("section");
+            section.element.style.textAlign = "left";
             let div = H("div");
             div.element.style.margin = "32px";
             let table = H("table");

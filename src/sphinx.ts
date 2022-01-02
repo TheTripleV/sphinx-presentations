@@ -67,6 +67,11 @@ function getElements(): Element[] {
             if (child.classList.contains("section") || child.tagName.toLowerCase() == "section") {
                 break;
             }
+
+            if (child.classList.contains("toctree-wrapper")) {
+                continue;
+            }
+
             elements.push(child);
         }
     }

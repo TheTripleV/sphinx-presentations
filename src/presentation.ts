@@ -91,7 +91,7 @@ function present(): void {
     let presentation = {slides: slidesArray};
 
     buildPresentation(presentation, slides);
-    
+
     // Inject the built presentation into the page
     let sherman = document.getElementsByTagName("body")[0];
     sherman.parentNode.replaceChild(peabody.element, sherman);
@@ -105,6 +105,16 @@ function initializePresentation(presentation: Presentation, reveal: Reveal) {
     /* This function is called after the presentation has been built.
         It initializes the presentation library and sets up a callback for splitting slides.
     */
+
+    // Load revealjs css
+
+    const thisURL = new Error().stack.match(`((https.*?)/js/present.js)`)[2];
+    const cssURL = thisURL + "/css/reveal.css";
+    document.getElementsByTagName("head")[0].appendChild(
+        htmlToElement(
+            `<link rel="stylesheet" href="${cssURL}">`
+        ).element
+    );
 
     // Initialize the presentation library
     reveal.initialize({

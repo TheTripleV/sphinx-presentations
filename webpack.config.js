@@ -3,6 +3,8 @@ const path = require('path');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
+const CopyPlugin = require("copy-webpack-plugin");
+
 
 module.exports = {
   mode: "production",
@@ -12,9 +14,8 @@ module.exports = {
     main: "./src/present.ts",
   },
   output: {
-    // path: path.resolve(__dirname, './sphinxext/presentations/static/js/'),
-    path: path.resolve(__dirname, './lte/frc-docs/build/html/_static/js/'),
-    filename: "present.js" // <--- Will be compiled to this single file
+    path: path.resolve(__dirname, './sphinxext/presentations/static/'),
+    filename: "js/present.js" // <--- Will be compiled to this single file
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -28,11 +29,16 @@ module.exports = {
     ]
   },
   plugins: [
+    new CopyPlugin({
+      patterns: [
+        { context: "node_modules", from: "reveal.js/dist/reveal.css", to: "css/reveal.css" },
+      ],
+    }),
     new LicenseWebpackPlugin({
       addBanner: true,
       renderBanner: (filename, modules) => {
         console.log(modules);
-        return '/*! licenses are at ' + filename + '*/';
+        return '/*! licenses are at ../' + filename + '*/';
       },
       licenseTextOverrides: {
         'lexing': `Copyright © 2015 Christopher Brown <io@henrian.com>

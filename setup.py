@@ -21,7 +21,7 @@ setuptools.setup(
     description="Sphinx Extension that turns documentation into presentations.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/TheTripleV/sphinx-presentations",
+    url="https://github.com/wpilibsuite/sphinx-presentations",
     packages=["sphinxext/presentations"],
     package_data={"sphinxext/presentations": [
         "static/css/*",
@@ -34,7 +34,7 @@ setuptools.setup(
         "Environment :: Web Environment",
         "Framework :: Sphinx :: Extension",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: BSD License",
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
