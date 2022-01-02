@@ -1,6 +1,6 @@
 "use strict";
 
-export {htmlToElement, createScriptElement, createScriptSrcElement, getNextSiblings};
+export {htmlToElement, createScriptElement, createScriptSrcElement, getNextSiblings, onLoad};
 
 import {H, Hwrappable, _H} from './element';
 
@@ -39,4 +39,13 @@ function getNextSiblings(elem) {
         sibs.push(elem);
     }
     return sibs;
+}
+
+function onLoad(callback: () => void) {
+    /* This function is called when the page loads.*/
+    if (document.readyState != "loading") {
+        callback();
+    } else {
+        document.addEventListener("DOMContentLoaded", callback);
+    }
 }

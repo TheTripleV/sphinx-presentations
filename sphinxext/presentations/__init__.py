@@ -12,7 +12,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     )
 
 
-    app.add_js_file(Path("./js/present.js").as_posix())
+    app.add_js_file(Path("./js/present.js").as_posix(), kwargs={"async": "async"})
 
     return {
         "parallel_read_safe": True,
